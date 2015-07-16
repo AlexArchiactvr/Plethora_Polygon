@@ -76,7 +76,13 @@ class polygon:
 		for a,b in zip(self.verts[:-1], self.verts[1:]):
 			area += np.cross(a, b)
 		return np.absolute(area*0.5)
- 
+
+	def transform(self, matrix):
+		zw = (0,1)
+		res = [matrix.dot(np.array(vert+zw))for vert in self.verts]
+		w = res[0].item(3)
+		return [tuple(ver.getA()[0][:-2]/w) for ver in res]
+
 
 def main():
 	valid_polys = [[(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)],
@@ -109,6 +115,15 @@ def main():
 		test_poly = polygon(poly)
 		print test_poly.area()
 		print area_values[ni] == test_poly.area()
+
+	test_poly = polygon([(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)])
+	mz_translate_scale = np.matrix(np.array([[1,0,0,2],[0,1,0,3],[0,0,1,4],[0,0,0,2.0]]))
+	mz_scale = np.matrix(np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,2.0]]))
+
+	print test_poly.verts
+	print test_poly.transform(mz_scale)
+	print test_poly.transform(mz_translate_scale)
+
 
 if __name__ == '__main__':
 	main()
