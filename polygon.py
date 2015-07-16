@@ -3,8 +3,8 @@ import numpy as np
 class polygon:
 
 	def __init__(self, verts):
-		if(self.isValid(verts)):
-			self.verts = verts
+	#	if(self.isValid(verts)):
+		self.verts = verts
 
 	def isValid(self,verts):
 		#adjacent lines can only meet once
@@ -57,15 +57,36 @@ class polygon:
 		print "True"
 		return True
 
+	def perimeter(self):
+		perim = 0
+		for a,b in zip(self.verts[:-1], self.verts[1:]):
+			temp = np.subtract(a,b)
+			perim += np.sqrt(np.dot(temp,temp))
+		return perim
+ 
+
 def main():
-	mypoly = polygon([(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)])
-	mypoly = polygon([(-10.2, -6), (0, 0), (1, -3), (1, -7), (0, -4), (-10.2, -6)])
+	valid_polys = [[(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)],
+					[(-10.2, -6), (0, 0), (1, -3), (1, -7), (0, -4), (-10.2, -6)]]
 	invalid_polys = [[(0, 0), (1, 0), (0, 0)],
 						[(0, 0), (1, 0), (1, 1), (0.5, 1), (0.5, 0), (0, 0)],
 						[(0, 0), (1, 0), (1, 1), (0, 0), (-1, 0), (0, -1), (0, 0)],
 						[(-1, 0), (1, 0), (0, 1), (0, -1), (-1, 0)]]
+	for poly in valid_polys:
+		polygon(poly)
 	for poly in invalid_polys:
-		mypoly = polygon(poly)
+		polygon(poly)
+
+	perim_polys = [[(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)],
+						[(0,0),(2,0),(5,4),(2,8),(-1,4),(0,4),(0,0)],
+						[(0,0),(-4,-3),(-1,1),(0,0)]]
+	perim_values = [4,22,10+np.sqrt(2)]
+
+	for ni, poly in enumerate(perim_polys):
+		test_poly = polygon(poly)
+		print perim_values[ni] == test_poly.perimeter()
+
+
 
 
 if __name__ == '__main__':
