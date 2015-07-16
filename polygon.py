@@ -63,6 +63,19 @@ class polygon:
 			temp = np.subtract(a,b)
 			perim += np.sqrt(np.dot(temp,temp))
 		return perim
+
+	def area(self):
+		area = 0
+		#use the origin as a base point
+		#in incremental pairs calculate the area of
+		#the triangle formed from by the origin, and the
+		#other two points on the polygon.
+		#the extra area will naturally be subtracted
+		#when calculating the area of triangles on the
+		#origin-side of the polygon.
+		for a,b in zip(self.verts[:-1], self.verts[1:]):
+			area += np.cross(a, b)
+		return np.absolute(area*0.5)
  
 
 def main():
@@ -77,6 +90,7 @@ def main():
 	for poly in invalid_polys:
 		polygon(poly)
 
+	print "Perimeters"
 	perim_polys = [[(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)],
 						[(0,0),(2,0),(5,4),(2,8),(-1,4),(0,4),(0,0)],
 						[(0,0),(-4,-3),(-1,1),(0,0)]]
@@ -86,8 +100,15 @@ def main():
 		test_poly = polygon(poly)
 		print perim_values[ni] == test_poly.perimeter()
 
-
-
+	print "Areas"
+	area_polys= [[(0,0),(3,0),(3,4),(0,0)],
+					[(0,0),(3,4),(3,6),(-1,9),(-1,0),(0,0)],
+					[(0,0),(1,0),(1,1),(3,1),(3,0),(5,0),(5,5),(0,5),(0,0)]]
+	area_values = [6,24,23]
+	for ni, poly in enumerate(area_polys):
+		test_poly = polygon(poly)
+		print test_poly.area()
+		print area_values[ni] == test_poly.area()
 
 if __name__ == '__main__':
 	main()
