@@ -26,8 +26,8 @@ class polygon:
 		#let A = a-c
 		#we expect t_2 = 0 for adjacent sides
 		#if 0<=t_2<=1 for any other side, then there is an intersection
-		for ni, i in enumerate(verts[:-3]):
-			for nj, j in enumerate(verts[ni+1:-2]):
+		for ni, i in enumerate(verts[:-2]):
+			for nj, j in enumerate(verts[ni+1:-1]):
 				nj += ni + 1
 				D = np.subtract(verts[nj+1],j)
 				B = np.subtract(verts[ni+1],i)
@@ -35,25 +35,25 @@ class polygon:
 				A = np.subtract(i,j)
 
 				DBinv = np.dot(D,Binv)
-				print nj,ni
-				#if np.dot(A,Binv) == 0:
-			#		print "parallel"
+
 				if DBinv != 0:
 					t2 = np.dot(A,Binv)/DBinv
 					t1 = np.dot(t2*D - A, B)/np.dot(B,B)
-					if nj-ni == 1: #adjacent sides
+					if (nj-ni == 1) : #adjacent sides
 						if t2 != 0:
-							print "FALSE1", t2, t1
+							print "False - Adjacent sides misaligned"
+							return False
+					elif nj-ni == len(verts)-2: #end and start are adjacent
+						if t2 != 1:
+							print "False - End does not meet start"
 							return False
 					else:
-						if (t2 >=0 and t2 <=1) and (t1 >=0 and t1 <=1) :
-							print "FALSE2", t2, t1
+						if (t2 >=0 and t2 <=1) and (t1 >=0 and t1 <=1):
+							print "False - Intersection"
 							return False
-				elif np.dot(A,Binv) == 0:
-					print "?"
+				elif np.dot(A,Binv) == 0: #can be parallel, but not overlapping
+					print "False - parallel lines overlap"
 					return False
-				else : 
-					print "?"
 		print "True"
 		return True
 
