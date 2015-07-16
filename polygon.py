@@ -65,26 +65,31 @@ def isValid(verts):
 			if DBinv != 0:
 				t2 = np.dot(A,Binv)/DBinv
 				t1 = np.dot(t2*D - A, B)/np.dot(B,B)
-				if (nj-ni == 1) : #adjacent sides
+				if (nj-ni == 1) : #adjacent sides (not necessary)
 					if t2 != 0:
-						print "False - Adjacent sides misaligned"
 						return False
 				elif nj-ni == len(verts)-2: #end and start are adjacent
 					if t2 != 1:
-						print "False - End does not meet start"
 						return False
 				else:
 					if (t2 >=0 and t2 <=1) and (t1 >=0 and t1 <=1):
-						print "False - Intersection"
 						return False
 			elif np.dot(A,Binv) == 0: #can be parallel, but not overlapping
-				print "False - parallel lines overlap"
-				return False
-	print "True"
+				#a + t_1(b-a)  = c +t_2(d-c)
+				#t1 = (-A + t2D) / B
+				#check t2 = 0, and t2 = 1
+				magB= np.dot(B,B)
+				t1_0 = -np.dot(A,B)/magB	#(-A*B)/(B*B)
+				t1_1 = np.dot(np.subtract(D,A),B)/magB	#(-A + D)*B/(B*B)
+
+				if (t1_0 >= 0 and t1_0 <= 1) or (t1_1 >=0 and t1_1 <=1):
+					return False
 	return True
+
 def main():
 	valid_polys = [[(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)],
-					[(-10.2, -6), (0, 0), (1, -3), (1, -7), (0, -4), (-10.2, -6)]]
+					[(-10.2, -6), (0, 0), (1, -3), (1, -7), (0, -4), (-10.2, -6)],
+					[(0,0),(1,0),(1,1),(3,1),(3,0),(5,0),(5,5),(0,5),(0,0)]]
 	invalid_polys = [[(0, 0), (1, 0), (0, 0)],
 						[(0, 0), (1, 0), (1, 1), (0.5, 1), (0.5, 0), (0, 0)],
 						[(0, 0), (1, 0), (1, 1), (0, 0), (-1, 0), (0, -1), (0, 0)],

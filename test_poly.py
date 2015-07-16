@@ -31,18 +31,12 @@ class PolygonTestCase(unittest.TestCase):
 			self.assertEqual(perim_values[ni],test_poly.perimeter())
 
 	def test_area(self):
-		print "Test Area"
 		area_polys= [[(0,0),(3,0),(3,4),(0,0)],
 						[(0,0),(3,4),(3,6),(-1,9),(-1,0),(0,0)],
 						[(0,0),(1,0),(1,1),(3,1),(3,0),(5,0),(5,5),(0,5),(0,0)]]
 		area_values = [6,24,23]
 		for na, poly in enumerate(area_polys):
-			print na
-			if isValid(poly) == False:
-				print "Failure"
-			else:
 				test_poly = polygon(poly)
-			#print test_poly.area()
 				self.assertEqual(area_values[na],test_poly.area())
 
 if __name__ == '__main__':
